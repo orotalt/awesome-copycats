@@ -16,8 +16,8 @@ local theme_name = "dracula"
 
 local theme  = {}
 theme.dir         = themes_path .. "/" .. theme_name .. "/"
-theme.wallpaper   = theme.dir .. "razer_blade.png"
-theme.font        = "Inconsolata 12"                                          
+theme.wallpaper   = theme.dir .. "asus_rog.jpg"
+theme.font        = "Inconsolata 16"
 
 theme.bg_normal     = "#282A36"
 theme.bg_focus      = "#44475A"
@@ -279,6 +279,8 @@ local net = lain.widget.net({
 local spr     = wibox.widget.textbox(' ')
 local arrl_dl = separators.arrow_left(theme.bg_focus, "alpha")
 local arrl_ld = separators.arrow_left("alpha", theme.bg_focus)
+local arrr_dl = separators.arrow_right(theme.bg_focus, "alpha")
+local arrr_ld = separators.arrow_right("alpha", theme.bg_focus)
 
 function theme.at_screen_connect(s)
     -- Quake application
@@ -312,7 +314,9 @@ function theme.at_screen_connect(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(18), bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(24), bg = theme.bg_normal, fg = theme.fg_normal })
+
+    s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, height = dpi(24), bg = theme.bg_normal, fg = theme.fg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -321,10 +325,14 @@ function theme.at_screen_connect(s)
             layout = wibox.layout.fixed.horizontal,
             --spr,
             s.mytaglist,
+            spr,
+            arrr_ld,
+            wibox.container.background(s.mylayoutbox, theme.bg_focus),
+            arrr_dl,
             s.mypromptbox,
             spr,
         },
-        s.mytasklist, -- Middle widget
+        spr,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
@@ -359,11 +367,25 @@ function theme.at_screen_connect(s)
             wibox.container.background(net.widget, theme.bg_focus),
             arrl_dl,
             clock,
+        }
+    }
+
+    -- Add widgets to the wibox
+    s.mybottomwibox:setup {
+        layout = wibox.layout.align.horizontal,
+        { -- Left widgets
+            layout = wibox.layout.fixed.horizontal,
+            --spr,
+            s.mypromptbox,
             spr,
-            arrl_ld,
-            wibox.container.background(s.mylayoutbox, theme.bg_focus),
+        },
+        s.mytasklist, -- Middle widget
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
+
         },
     }
 end
+
 
 return theme
